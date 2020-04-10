@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <parent>
+        <groupId>io.github.miquelo</groupId>
+        <artifactId>exsiliens</artifactId>
+        <version>0.1</version>
+    </parent>
+    
+    <artifactId>exsiliens-machine</artifactId>
+    <packaging>pom</packaging>
+    
+    <name>Exsiliens Machine</name>
+    <description>Exsiliens machine</description>
+    
+    <build>
+        <plugins>
+        
+            <plugin>
+                <groupId>com.googlecode.maven-download-plugin</groupId>
+                <artifactId>download-maven-plugin</artifactId>
+                <version>1.5.1</version>
+                <executions>
+                    <execution>
+                        <id>download-glassfish-v5</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>wget</goal>
+                        </goals>
+                        <configuration>
+                            <uri>http://download.oracle.com/glassfish/5.0.1/release/glassfish-5.0.1.zip</uri>
+                            <outputDirectory>${project.build.directory}/packer/input/appserver/file/glassfish</outputDirectory>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+            <plugin>
+                <groupId>io.github.miquelo</groupId>
+                <artifactId>packer-maven-plugin</artifactId>
+                <version>0.3.2</version>
+                <executions>
+                    <execution>
+                        <id>packer-build-base</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <fileSet>
+                                <directory>${basedir}/src/main/packer/base</directory>
+                                <includes>
+                                    <include>**</include>
+                                </includes>
+                                <outputDirectory>${project.build.directory}/packer/input/base</outputDirectory>
+                            </fileSet>
+                            <only>docker</only>
+                            <force>true</force>
+                            <varFiles>
+                                <file>vars/debian-iso.json</file>
+                            </varFiles>
+                            <vars>
+                                <property>
+                                    <name>version</name>
+                                    <value>${project.version}</value>
+                                </property>
+                                <property>
+                                    <name>output_dir</name>
+                                    <value>${project.build.directory}/packer/output</value>
+                                </property>
+                            </vars>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>packer-build-appserver</id>
+                        <goals>
+                            <goal>build</goal>
+                        </goals>
+                        <phase>package</phase>
+                        <configuration>
+                            <fileSet>
+                                <directory>${basedir}/src/main/packer/appserver</directory>
+                                <includes>
+                                    <include>**</include>
+                                </includes>
+                                <outputDirectory>${project.build.directory}/packer/input/appserver</outputDirectory>
+                            </fileSet>
+                            <templatePath>template.json</templatePath>
+                            <only>docker</only>
+                            <force>true</force>
+                            <vars>
+                                <property>
+                                    <name>version</name>
+                                    <value>${project.version}</value>
+                                </property>
+                                <property>
+                                    <name>output_dir</name>
+                                    <value>${project.build.directory}/packer/output</value>
+                                </property>
+                            </vars>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+        </plugins>
+    </build>
+    
+</project>
+

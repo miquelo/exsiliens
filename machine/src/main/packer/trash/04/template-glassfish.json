@@ -1,0 +1,34 @@
+{
+  "variables": {
+    "output_dir": "{{template_dir}}/output"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-ovf",
+      
+      "source_path": "{{user `output_dir`}}/debian-root/debian-root.ovf",
+      
+      "vm_name": "glassfish",
+      "headless": true,
+      "ssh_username": "root",
+      "ssh_password": "root",
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "shutdown -P now",
+      
+      "guest_additions_mode": "disable",
+      
+      "output_directory": "{{user `output_dir`}}/glassfish"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "scripts": [
+        "{{template_dir}}/script/apt-get-update.sh",
+        "{{template_dir}}/script/ssh-server-authkeys.sh",
+        "{{template_dir}}/script/jdk8.sh",
+        "{{template_dir}}/script/delete-packer-user.sh"
+      ]
+    }
+  ]
+}

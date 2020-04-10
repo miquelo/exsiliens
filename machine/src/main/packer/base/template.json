@@ -1,0 +1,114 @@
+{
+  "variables": {
+    "output_dir": "{{template_dir}}/output",
+    "iso_url": "",
+    "iso_checksum": "",
+    "iso_checksum_type": ""
+  },
+  "builders": [
+    {
+      "name": "virtualbox-iso",
+      "type": "virtualbox-iso",
+      
+      "iso_url": "{{user `iso_url`}}",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "{{user `iso_checksum_type`}}",
+      
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", 1024 ],
+        [ "modifyvm", "{{.Name}}", "--cpus", 1 ]
+      ],
+      
+      "vm_name": "exsiliens-base",
+      "guest_os_type": "Debian_64",
+      "guest_additions_mode": "disable",
+      "headless": true,
+      
+      "http_directory": "{{template_dir}}/http",
+      "boot_command": [
+        "<esc><wait>",
+        "install",
+        " auto",
+        " url=http://{{.HTTPIP}}:{{.HTTPPort}}/preseed.cfg",
+        " debian-installer=en_US",
+        " locale=en_US",
+        " keymap=us",
+        " netcfg/get_hostname=exsiliens-machine",
+        " netcfg/get_domain=exsiliens.net",
+        "<enter>"
+      ],
+      
+      "ssh_username": "root",
+      "ssh_password": "root",
+      "ssh_wait_timeout": "1200s",
+      "shutdown_command": "shutdown -P now",
+      
+      "output_directory": "{{user `output_dir`}}/base"
+    },
+    {
+      "name": "docker",
+      "type": "docker",
+      
+      "image": "library/debian",
+      "commit": true,
+      "changes": [
+        "ENTRYPOINT /init"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/script/system-prepare.sh"
+    },
+    {
+      "type": "file",
+      "source": "{{template_dir}}/file/system/",
+      "destination": "/tmp/packer"
+    },
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/script/system-setup-vanilla.sh",
+      
+      "except": [
+        "docker"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/script/system-setup-docker.sh",
+      
+      "only": [
+        "docker"
+      ]
+    },
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/script/system-setup.sh"
+    },
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/script/ssh-authkeys-prepare.sh"
+    },
+    {
+      "type": "file",
+      "source": "{{template_dir}}/file/ssh-authkeys/",
+      "destination": "/tmp/packer"
+    },
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/script/ssh-authkeys-setup.sh"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "docker-tag",
+      "repository": "exsiliens/base",
+      "tag": "{{user `version`}}",
+      
+      "only": [
+        "docker"
+      ]
+    }
+  ]
+}

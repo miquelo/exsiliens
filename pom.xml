@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    
+    <modelVersion>4.0.0</modelVersion>
+    
+    <groupId>io.github.miquelo</groupId>
+    <artifactId>exsiliens</artifactId>
+    <version>0.1</version>
+    <packaging>pom</packaging>
+    
+    <name>Exsiliens</name>
+    <description>Cloud ready GlasshFish Server</description>
+    <url>https://github.com/miquelo/exsiliens</url>
+    
+    <licenses>
+        <license>
+            <name>GNU GENERAL PUBLIC LICENSE Version 3</name>
+            <url>https://www.gnu.org/licenses/gpl-3.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+    
+    <dependencies>
+    
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>5.6.1</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-engine</artifactId>
+            <version>5.6.1</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <version>2.13.0</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.9.0</version>
+            <scope>test</scope>
+        </dependency>
+        
+    </dependencies>
+    
+    <build>
+        <pluginManagement>
+            <plugins>
+            
+                <plugin>
+                     <groupId>org.apache.maven.plugins</groupId>
+                     <artifactId>maven-compiler-plugin</artifactId>
+                     <version>3.8.0</version>
+                     <configuration>
+                         <source>1.8</source>
+                         <target>1.8</target>
+                     </configuration>
+                 </plugin>
+                 
+                 <plugin>
+                     <groupId>org.apache.maven.plugins</groupId>
+                     <artifactId>maven-jarsigner-plugin</artifactId>
+                     <version>1.4</version>
+                     <configuration>
+                         <keystore>${settings.codesigner.keystore}</keystore>
+                         <storetype>${settings.codesigner.storetype}</storetype>
+                         <alias>${settings.codesigner.alias}</alias>
+                         <keypass>${settings.codesigner.keypass}</keypass>
+                         <storepass>${settings.codesigner.storepass}</storepass>
+                         <sigfile>EXSILIENS</sigfile>
+                     </configuration>
+                 </plugin>
+                 
+                 <plugin>
+                    <groupId>org.eclipse.m2e</groupId>
+                    <artifactId>lifecycle-mapping</artifactId>
+                    <version>1.0.0</version>
+                    <configuration>
+                        <lifecycleMappingMetadata>
+                            <pluginExecutions>
+                                <pluginExecution>
+                                    <pluginExecutionFilter>
+                                        <groupId>com.googlecode.maven-download-plugin</groupId>
+                                        <artifactId>download-maven-plugin</artifactId>
+                                        <versionRange>[1.2.1,)</versionRange>
+                                        <goals>
+                                            <goal>wget</goal>
+                                        </goals>
+                                    </pluginExecutionFilter>
+                                    <action>
+                                        <ignore/>
+                                    </action>
+                                </pluginExecution>
+                            </pluginExecutions>
+                        </lifecycleMappingMetadata>
+                    </configuration>
+                </plugin>
+                 
+            </plugins>
+        </pluginManagement>
+        <plugins>
+    
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <executions>
+                    <execution>
+                        <id>default-prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-report</id>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>default-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.00</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                                <rule>
+                                    <element>CLASS</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.00</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>0.00</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            
+        </plugins>
+    </build>
+    
+    <reporting>
+        <plugins>
+            
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.10.3</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+                <configuration>
+                    <windowtitle>Exsiliens API</windowtitle>
+                    <doctitle>Exsiliens API</doctitle>
+                    <charset>UTF-8</charset>
+                    <encoding>UTF-8</encoding>
+                    <links>
+                        <link>https://docs.oracle.com/javase/8/docs/api/</link>
+                        <link>http://docs.oracle.com/javaee/7/api/</link>
+                    </links>
+                </configuration>
+            </plugin>
+            
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.8.5</version>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            
+        </plugins>
+    </reporting>
+    
+    <modules>
+        <module>agent</module>
+        <module>agent-event</module>
+        <module>agent-event-machine-lost</module>
+        <module>util-glassfish-admin</module>
+        <module>machine</module>
+        <module>tool</module>
+    </modules>
+    
+    <properties>
+    
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        
+        <settings.codesigner.keystore>keystore.jks</settings.codesigner.keystore>
+        <settings.codesigner.storetype>JKS</settings.codesigner.storetype>
+        <settings.codesigner.alias>codesigner</settings.codesigner.alias>
+        <settings.codesigner.keypass>12345678</settings.codesigner.keypass>
+        <settings.codesigner.storepass>12345678</settings.codesigner.storepass>
+        
+    </properties>
+    
+</project>
+

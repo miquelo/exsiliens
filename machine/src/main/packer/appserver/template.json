@@ -1,0 +1,69 @@
+{
+  "variables": {
+    "output_dir": "{{template_dir}}/output"
+  },
+  "builders": [
+    {
+      "name": "virtualbox-ovf",
+      "type": "virtualbox-ovf",
+      
+      "source_path": "{{user `output_dir`}}/base/exsiliens-base.ovf",
+      
+      "vm_name": "exsiliens-appserver",
+      "headless": true,
+      "ssh_username": "root",
+      "ssh_password": "root",
+      "ssh_wait_timeout": "1000s",
+      "shutdown_command": "shutdown -P now",
+      
+      "guest_additions_mode": "disable",
+      
+      "output_directory": "{{user `output_dir`}}/appserver"
+    },
+    {
+      "name": "docker",
+      "type": "docker",
+      
+      "image": "exsiliens/base:{{user `version`}}",
+      "commit": true,
+      "pull": false,
+      "changes": [
+        "ENTRYPOINT /init"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/script/jdk8-debian-buster.sh"
+    },
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/script/glassfish-prepare.sh"
+    },
+    {
+      "type": "file",
+      "source": "{{template_dir}}/file/glassfish/",
+      "destination": "/tmp/packer"
+    },
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/script/glassfish-setup.sh"
+    },
+    {
+      "type": "shell",
+      "script": "{{template_dir}}/script/cleanup.sh"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "docker-tag",
+      "repository": "exsiliens/appserver",
+      "tag": "{{user `version`}}",
+      
+      "only": [
+        "docker"
+      ]
+    }
+  ]
+}

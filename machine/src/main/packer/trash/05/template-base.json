@@ -1,0 +1,71 @@
+{
+  "variables": {
+    "output_dir": "{{template_dir}}/output",
+    "debian_root_iso_url": "",
+    "debian_root_iso_checksum": "",
+    "debian_root_iso_checksum_type": ""
+  },
+  "builders": [
+    {
+      "name": "debian-ssh-authkeys",
+      "type": "virtualbox-iso",
+      
+      "iso_url": "{{user `debian_root_iso_url`}}",
+      "iso_checksum": "{{user `debian_root_iso_checksum`}}",
+      "iso_checksum_type": "{{user `debian_root_iso_checksum_type`}}",
+      
+      "vboxmanage": [
+        [ "modifyvm", "{{.Name}}", "--memory", 1024 ],
+        [ "modifyvm", "{{.Name}}", "--cpus", 1 ]
+      ],
+      
+      "vm_name": "exsiliens-base-root",
+      "guest_os_type": "Debian_64",
+      "guest_additions_mode": "disable",
+      "headless": true,
+      "http_directory": "{{template_dir}}/debian-root/http",
+      "boot_command": [
+        "<esc><wait>",
+        "install",
+        " auto",
+        " url=http://{{.HTTPIP}}:{{.HTTPPort}}/preseed.cfg",
+        " debian-installer=en_US",
+        " locale=en_US",
+        " keymap=us",
+        " netcfg/get_hostname=machine",
+        " netcfg/get_domain=exiliens.net",
+        "<enter>"
+      ],
+      "ssh_username": "packer",
+      "ssh_password": "packer",
+      "ssh_wait_timeout": "10000s",
+      "shutdown_command": "echo 'packer' | sudo -S shutdown -P now",
+      
+      "output_directory": "{{user `output_dir`}}/base"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo 'packer' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+      "scripts": [
+        "{{template_dir}}/debian-root/script/apt-disabled-cdrom.sh",
+        "{{template_dir}}/debian-root/script/ssh-server-root.sh"
+      ],
+      "only": [
+        "base-setup"
+      ]
+    },
+    {
+      "type": "shell",
+      "scripts": [
+        "{{template_dir}}/debian-root/script/delete-packer-user.sh",
+        "{{template_dir}}/debian-root/script/disable-sudo.sh",
+        "{{template_dir}}/apt-get/script/apt-get-autoremove.sh"
+      ],
+      "only": [
+        "base"
+      ]
+    }
+  ]
+}
