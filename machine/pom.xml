@@ -41,7 +41,7 @@
             </plugin>
             
             <plugin>
-                <groupId>io.github.miquelo</groupId>
+                <groupId>io.github.miquelo.maven.plugin.packer</groupId>
                 <artifactId>packer-maven-plugin</artifactId>
                 <version>0.4.0</version>
                 <executions>
