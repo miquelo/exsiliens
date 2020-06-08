@@ -12,10 +12,10 @@
         <version>0.1</version>
     </parent>
     
-    <artifactId>exsiliens-util-glassfish-admin</artifactId>
+    <artifactId>exsiliens-agent-glassfish-admin</artifactId>
 	<packaging>jar</packaging>
 	
-	<name>Exsiliens Agent Utilities - GlassFish Admin</name>
+	<name>Exsiliens Agent - GlassFish Admin</name>
 	<description>[...]</description>
 	
 </project>

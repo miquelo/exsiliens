@@ -43,7 +43,7 @@
             <plugin>
                 <groupId>io.github.miquelo</groupId>
                 <artifactId>packer-maven-plugin</artifactId>
-                <version>0.3.2</version>
+                <version>0.4.0</version>
                 <executions>
                     <execution>
                         <id>packer-build-base</id>

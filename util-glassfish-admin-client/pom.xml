@@ -12,10 +12,10 @@
         <version>0.1</version>
     </parent>
     
-    <artifactId>exsiliens-agent-event</artifactId>
+    <artifactId>exsiliens-util-glassfish-admin-client</artifactId>
 	<packaging>jar</packaging>
 	
-	<name>Exsiliens Agent - Event</name>
+	<name>Exsiliens Utilities - GlassFish Admin Client</name>
 	<description>[...]</description>
 	
 </project>

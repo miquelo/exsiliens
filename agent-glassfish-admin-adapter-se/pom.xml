@@ -12,23 +12,23 @@
         <version>0.1</version>
     </parent>
     
-    <artifactId>exsiliens-agent-event-machine-lost</artifactId>
+    <artifactId>exsiliens-agent-glassfish-admin-adapter</artifactId>
 	<packaging>jar</packaging>
 	
-	<name>Exsiliens Agent - Event Machine Lost</name>
+	<name>Exsiliens Agent - GlassFish Admin Adapter SE</name>
 	<description>[...]</description>
 	
 	<dependencies>
-       
+	
 	   <dependency>
 	       <groupId>io.github.miquelo</groupId>
-           <artifactId>exsiliens-agent-event</artifactId>
-           <version>0.1</version>
+	       <artifactId>exsiliens-agent-glassfish-admin</artifactId>
+	       <version>0.1</version>
 	   </dependency>
 	   
 	   <dependency>
            <groupId>io.github.miquelo</groupId>
-           <artifactId>exsiliens-agent-glassfish-admin</artifactId>
+           <artifactId>exsiliens-util-glassfish-admin-client</artifactId>
            <version>0.1</version>
        </dependency>
 	   

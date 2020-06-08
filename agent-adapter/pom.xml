@@ -12,10 +12,10 @@
         <version>0.1</version>
     </parent>
     
-    <artifactId>exsiliens-agent-event</artifactId>
+    <artifactId>exsiliens-agent-adapter</artifactId>
 	<packaging>jar</packaging>
 	
-	<name>Exsiliens Agent - Event</name>
+	<name>Exsiliens Agent - Adapter</name>
 	<description>[...]</description>
 	
 </project>
