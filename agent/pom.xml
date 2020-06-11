@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-        <groupId>io.github.miquelo</groupId>
+        <groupId>io.github.miquelo.exsiliens</groupId>
         <artifactId>exsiliens</artifactId>
         <version>0.1</version>
     </parent>
