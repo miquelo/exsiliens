@@ -213,12 +213,7 @@
     </reporting>
     
     <modules>
-        <module>agent</module>
-        <module>agent-event</module>
-        <module>agent-event-machine-lost</module>
-        <module>util-glassfish-admin</module>
         <module>machine</module>
-        <module>tool</module>
     </modules>
     
     <properties>

@@ -4,7 +4,7 @@ docker run -d \
 -p 2201:22 \
 -p 4848:4848 \
 --name exsiliens-appserver-test \
---hostname exsiliens-machine \
+--hostname exsiliens-appserver \
 exsiliens/appserver:0.1
 
 sleep 1s
